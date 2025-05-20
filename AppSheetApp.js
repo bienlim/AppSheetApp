@@ -26,10 +26,10 @@
  * 4.  Ensure that at least one unexpired **Application Access Key** is present.  
  *     Otherwise, click **Create Application Access Key**.
  * 5.  When you are done, save the app.
- * 6.  Use you app ID and Access Key to connect Apps Script to your app
+ * 6.  Use your app ID and Access Key to connect Apps Script to your app
  *
  * @param {String} appId AppSheet App ID.
- * @param {String} applicationAccessKey AppSheet App Acess Key.
+ * @param {String} applicationAccessKey AppSheet App Access Key.
  * @return {AppSheetApp}
  */
 function connect(appId, applicationAccessKey) {
@@ -77,7 +77,7 @@ function Edit(tableName, rows, properties = {}) {
  * 
  * @param {String} tableName - specifies the name of the table
  * @param {Object[]} rows - **Optional**. You can omit the Selector property and specify input Rows containing the key values of the records to be read.
- * @param {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]. Additionaly the optional `Selector` property can used to specify an expression to select and format the rows returned [[Ref](https://support.google.com/appsheet/answer/10105770#:~:text=Read-,selected%20rows,-In%20the%20Selector)].    
+ * @param {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]. Additionally the optional `Selector` property can used to specify an expression to select and format the rows returned [[Ref](https://support.google.com/appsheet/answer/10105770#:~:text=Read-,selected%20rows,-In%20the%20Selector)].    
  * @returns {Object} AppSheet Response
  */
 function Find(tableName, rows, properties = {}) {
@@ -88,12 +88,12 @@ function Find(tableName, rows, properties = {}) {
  * Invoke an action
  * 
  * @param {String} tableName - specifies the name of the table
- * @param {Object[]} rows - One or more Rows elements specifying the key field values of the rows to which the action is to be applied.
  * @param {String} action - The action name.
+ * @param {Object[]} rows - One or more Rows elements specifying the key field values of the rows to which the action is to be applied.
  * @param {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]   
  * @returns {Object} AppSheet Response
  */
-function Action(tableName, rows, action, properties = {}) {
+function Action(tableName, action, rows, properties = {}) {
     return AppSheetApp._appSheetAPI(tableName, action, rows, properties);
 }
 
@@ -104,7 +104,7 @@ class _AppSheet {
     /** 
      * @constructor 
      * @param {String} appId - AppSheet Application ID.
-     * @param {String} applicationAccessKey - AppSheet Acess Token.
+     * @param {String} applicationAccessKey - AppSheet Access Key.
      * @return {_AppSheet}
     */
     constructor(appId, applicationAccessKey) {

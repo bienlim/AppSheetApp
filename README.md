@@ -40,7 +40,7 @@ Before you can start making calls to your AppSheet app you need to use the `conn
 
 > If you have copied `AppSheetApp.js` into your project instead of `connect()` use `new AppSheetApp()`
 
-Once you have connected to your app you can use methods to add, delete, read and update table records. The example below shows how to connect to your app and add two rows to a 'People' table:
+Once you have connected to your app, you can use methods to add, delete, read, and update table records. The example below shows how to connect to your app and add two rows to a 'People' table:
 
 ```
 /**
@@ -49,7 +49,7 @@ Once you have connected to your app you can use methods to add, delete, read and
 function addRowsToTable() {
     const AppSheet = AppSheetApp.connect('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
     // Alternatively if you have copied AppSheetApp.js use
-    // const AppSheet = AppSheetApp('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
+    // const AppSheet = new AppSheetApp('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
 
     const rows = [
         {
@@ -74,7 +74,7 @@ function addRowsToTable() {
 
 ## Example response body
 
-The returned records include all field values. This includes virtual fields and field values computed by worksheet formulas.
+The returned records include all field values. This includes virtual fields and field values computed by worksheet formulas. The following is an example of a response body that might be returned from an `Add` operation (when new records are created) or a `Find` operation (when records are retrieved).
 
 ```
 {
@@ -97,6 +97,10 @@ The returned records include all field values. This includes virtual fields and 
 }
 ```
 
+## Error Handling
+
+If an API call to AppSheet fails (e.g., due to incorrect setup, API errors, or network issues), the `AppSheetApp` methods will return the error object caught during the operation. Your Apps Script code should check the response from each call to see if it's an error object and handle it appropriately. For example, you can check if the returned object has an `Error` property or is an instance of `Error`.
+
 ## Reference
 
 For more detailed information on the data about the actions, properties, rows and responses, see the [AppSheet API reference documentation](https://support.google.com/appsheet/answer/10105768).
@@ -110,7 +114,7 @@ For more detailed information on the data about the actions, properties, rows an
 | [`Delete(tableName, rows, properties = {})`](#Delete)      | Delete records from a table.           |
 | [`Edit(tableName, rows, properties = {})`](#Edit)          | Update records in a table.             |
 | [`Find(tableName, rows, properties = {})`](#Find)          | Read records from a table.             |
-| [`Action(tableName, rows, properties = {})`](#Action)      | Invoke an action.                      |
+| [`Action(tableName, action, rows, properties = {})`](#Action)      | Invoke an action.                      |
 
 <a name="connect"></a>
 
@@ -124,7 +128,7 @@ To enable the AppSheet API in your app:
 1. Under **IN: from cloud services to your app**, click the **Enable** toggle. This enables the API for the application as a whole.
 1. Ensure that at least one unexpired **Application Access Key** is present. Otherwise, click **Create Application Access Key**.
 1. When you are done, save the app.
-1. Use you app ID and Access Key to connect Apps Script to your app
+1. Use your app ID and Access Key to connect Apps Script to your app
 
 
 ```
@@ -134,7 +138,7 @@ const AppSheet = AppSheetApp.connect('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
 | Param | Type | Description |
 | --- | --- | --- |
 | `appId` | <code>String</code> | AppSheet App ID. |
-| `applicationAccessKey` | <code>String</code> | AppSheet App Acess Key. |
+| `applicationAccessKey` | <code>String</code> | AppSheet App Access Key. |
 
 <a name="Add"></a>
 
@@ -213,13 +217,13 @@ function findRowsInTable(){
 | --- | --- | --- |
 | `tableName` | <code>String</code> | specifies the name of the table |
 | `rows` | <code>Array.&lt;Object&gt;</code> | **Optional**. You can omit the Selector property and specify input Rows containing the key values of the records to be read. |
-| `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]. Additionaly the optional `Selector` property can used to specify an expression to select and format the rows returned [[Ref](https://support.google.com/appsheet/answer/10105770#:~:text=Read-,selected%20rows,-In%20the%20Selector)]. |
+| `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]. Additionally the optional `Selector` property can used to specify an expression to select and format the rows returned [[Ref](https://support.google.com/appsheet/answer/10105770#:~:text=Read-,selected%20rows,-In%20the%20Selector)]. |
 
 **Returns**: <code>Object</code> - AppSheet Response
 
 <a name="Action"></a>
 
-## <code>Action(tableName, rows, action, properties) ⇒ Object</code>
+## <code>Action(tableName, action, rows, properties) ⇒ Object</code>
 Invoke an action
 
 | Param | Type | Description |

@@ -112,24 +112,44 @@ class _AppSheet {
         this.applicationAccessKey = applicationAccessKey;
     }
 
-    Add(tableName, rows, properties = {}) {
-        return this._appSheetAPI(tableName, 'Add', rows, properties);
+    Add(tableName, rows, properties = {}, paramOnly = false ) {
+       if(paramOnly) {
+            return this._appSheetParam(tableName, 'Add', rows, properties):
+        } else {
+            return this._appSheetAPI(tableName, 'Add', rows, properties);
+        }
     }
 
-    Delete(tableName, rows, properties = {}) {
-        return this._appSheetAPI(tableName, 'Delete', rows, properties);
+    Delete(tableName, rows, properties = {},  paramOnly = false ) {
+        if(paramOnly) {
+            return this._appSheetParam(tableName, 'Delete', rows, properties):
+        } else {
+            return this._appSheetAPI(tableName, 'Delete', rows, properties);
+        }
     }
 
-    Edit(tableName, rows, properties = {}) {
-        return this._appSheetAPI(tableName, 'Edit', rows, properties);
+    Edit(tableName, rows, properties = {}, paramOnly = false) {
+       if(paramOnly) {
+            return this._appSheetParam(tableName, 'Edit', rows, properties):
+        } else {
+            return this._appSheetAPI(tableName, 'Edit', rows, properties);
+        }
     }
 
-    Find(tableName, rows, properties = {}) {
-        return this._appSheetAPI(tableName, 'Find', rows, properties);
+    Find(tableName, rows, properties = {}, paramOnly = false) {
+        if(paramOnly) {
+            return this._appSheetParam(tableName, 'Find', rows, properties):
+        } else {
+            return this._appSheetAPI(tableName, 'Find', rows, properties);
+        }
     }
 
-    Action(tableName, action, rows, properties = {}) {
-        return this._appSheetAPI(tableName, action, rows, properties);
+    Action(tableName, action, rows, properties = {}, paramOnly = false) {
+        if(paramOnly) {
+            return this._appSheetParam(tableName,action, rows, properties):
+        } else {
+            return this._appSheetAPI(tableName, action, rows, properties);
+        }
     }
 
     /**
@@ -140,7 +160,7 @@ class _AppSheet {
      * @param {Object} properties - Additional properties for the request.
      */
     _appSheetAPI(tableName, action, rows, properties) {
-        const params = this._appSheetRequest(tableName, action, rows, properties);
+        const params = this._appSheetParam(tableName, action, rows, properties);
         const url = params.url;
         delete params.url; // url should not be a part of params
 
@@ -157,18 +177,15 @@ class _AppSheet {
      * Make multiple requests to the AppSheet API.
      * @param {Array<{tableName: string, action: string, rows: Object[], properties: Object}>} params - An array of request parameters.
      */
-    fetchAll(params){
-        const requests = params.map(param => {
-            return this._appSheetRequest(param.tableName, param.action, param.rows, param.properties);
-        });
+    fetchAll(...params){
         try {
-            const responses = UrlFetchApp.fetchAll(requests);
+            const responses = UrlFetchApp.fetchAll(params);
             return responses.map(response => JSON.parse(response.getContentText()));
         } catch (e) {
             return e;
         }
     }
-    _appSheetRequest(tableName, action, rows = [], properties = {}) {        
+    _appSheetParam(tableName, action, rows = [], properties = {}) {        
         return {
             url: `https://api.appsheet.com/api/v2/apps/${this.appId}/tables/${tableName}/Action`,
             method: 'post',

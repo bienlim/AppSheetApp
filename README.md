@@ -22,7 +22,7 @@ This project is already published as an Apps Script library, making it easy to i
 
 1. In the **Libraries** section click on the **Add a library** button (＋)
 2. In the **Script ID** text box, enter
-   `19UWd_F9ht9KuE4gxeNdFG8qIMdBeTu5gXyecmPqr8yOEoVO8UcxBYVsJ` and click the **Lookup** button.
+   `AKfycbzMHTi6x3Kx0zeD_01AIYBYnUAVMRbiWG8RZmgIPsb44ZHxtsWH5jNoSwljEAmx5MAD` and click the **Lookup** button.
 3. Choose a version in the dropdown box (usually best to pick the latest
    version).
 4. Click the **Add** button.

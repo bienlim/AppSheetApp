@@ -132,41 +132,18 @@ class _AppSheet {
         return this._appSheetAPI(tableName, action, rows, properties);
     }
 
-    fetchAll(params){
-        params = params.map(param => 
-            this._appSheetRequest(param.tableName, param.action, param?.rows, param.properties)
-        )
-        try {
-                const responses = UrlFetchApp.fetchAll(params);
-                return responses.map(
-                response => JSON.parse(response.getContentText())
-                );
-            } catch (e) {
-                return e;
-            }
-    }
-
+    /**
+     * Make a request to the AppSheet API.
+     * @param {String} tableName - The name of the table.
+     * @param {String} action - The action to perform.
+     * @param {Object[]} rows - The rows to operate on.
+     * @param {Object} properties - Additional properties for the request.
+     */
     _appSheetAPI(tableName, action, rows, properties) {
-        const self = this;
+        const params = this._appSheetRequest(tableName, action, rows, properties);
+        const url = params.url;
+        delete params.url; // url should not be a part of params
 
-        // based on https://www.googlecloudcommunity.com/gc/Tips-Tricks/Call-AppSheet-API-from-Apps-Script/m-p/447165
-        const body = {
-            'Action': action,
-            'Rows': rows,
-            "Properties": properties
-        };
-
-        // Values universal to AppSheet API calls
-        const url = `https://api.appsheet.com/api/v2/apps/${self.appId}/tables/${tableName}/Action`;
-        const method = 'POST';
-
-        const params = {
-            'method': method,
-            'contentType': 'application/json',
-            'headers': { 'ApplicationAccessKey': self.applicationAccessKey },
-            'payload': JSON.stringify(body),
-            'muteHttpExceptions': true
-        };
 
         try {
             const response = UrlFetchApp.fetch(url, params);
@@ -176,30 +153,30 @@ class _AppSheet {
         }
     }
 
-    _appSheetRequest(tableName, action, rows = [], properties = {}) {
-        const self = this;
-
-        // based on https://www.googlecloudcommunity.com/gc/Tips-Tricks/Call-AppSheet-API-from-Apps-Script/m-p/447165
-        const body = {
-            'Action': action,
-            'Rows': rows,
-            "Properties": properties
+    /**
+     * Make multiple requests to the AppSheet API.
+     * @param {Array<{tableName: string, action: string, rows: Object[], properties: Object}>} params - An array of request parameters.
+     */
+    fetchAll(params){
+        const requests = params.map(param => {
+            return this._appSheetRequest(param.tableName, param.action, param.rows, param.properties);
+        });
+        try {
+            const responses = UrlFetchApp.fetchAll(requests);
+            return responses.map(response => JSON.parse(response.getContentText()));
+        } catch (e) {
+            return e;
+        }
+    }
+    _appSheetRequest(tableName, action, rows = [], properties = {}) {        
+        return {
+            url: `https://api.appsheet.com/api/v2/apps/${this.appId}/tables/${tableName}/Action`,
+            method: 'post',
+            contentType: 'application/json', 
+            headers: { ApplicationAccessKey: this.applicationAccessKey }, 
+            payload: JSON.stringify({ Action: action, Rows: rows, Properties: properties }), 
+            muteHttpExceptions: true
         };
-
-        // Values universal to AppSheet API calls
-        const url = `https://api.appsheet.com/api/v2/apps/${self.appId}/tables/${tableName}/Action`;
-        const method = 'POST';
-
-        const params = {
-            'url':url,
-            'method': method,
-            'contentType': 'application/json',
-            'headers': { 'ApplicationAccessKey': self.applicationAccessKey },
-            'payload': JSON.stringify(body),
-            'muteHttpExceptions': true
-        };
-
-        return params
     }
 }
 var AppSheetApp = _AppSheet;

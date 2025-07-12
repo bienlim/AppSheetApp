@@ -32,7 +32,7 @@
  * @param {String} applicationAccessKey AppSheet App Access Key.
  * @return {AppSheetApp}
  */
-function  (appId, applicationAccessKey) {
+function  connect(appId, applicationAccessKey) {
     return new AppSheetApp(appId, applicationAccessKey);
 }
 
@@ -114,7 +114,7 @@ class _AppSheet {
 
     Add(tableName, rows, properties = {}, paramOnly = false ) {
        if(paramOnly) {
-            return this._appSheetParam(tableName, 'Add', rows, properties):
+            return this._appSheetParam(tableName, 'Add', rows, properties)
         } else {
             return this._appSheetAPI(tableName, 'Add', rows, properties);
         }
@@ -122,7 +122,7 @@ class _AppSheet {
 
     Delete(tableName, rows, properties = {},  paramOnly = false ) {
         if(paramOnly) {
-            return this._appSheetParam(tableName, 'Delete', rows, properties):
+            return this._appSheetParam(tableName, 'Delete', rows, properties)
         } else {
             return this._appSheetAPI(tableName, 'Delete', rows, properties);
         }
@@ -130,7 +130,7 @@ class _AppSheet {
 
     Edit(tableName, rows, properties = {}, paramOnly = false) {
        if(paramOnly) {
-            return this._appSheetParam(tableName, 'Edit', rows, properties):
+            return this._appSheetParam(tableName, 'Edit', rows, properties)
         } else {
             return this._appSheetAPI(tableName, 'Edit', rows, properties);
         }
@@ -138,7 +138,7 @@ class _AppSheet {
 
     Find(tableName, rows, properties = {}, paramOnly = false) {
         if(paramOnly) {
-            return this._appSheetParam(tableName, 'Find', rows, properties):
+            return this._appSheetParam(tableName, 'Find', rows, properties)
         } else {
             return this._appSheetAPI(tableName, 'Find', rows, properties);
         }
@@ -146,7 +146,7 @@ class _AppSheet {
 
     Action(tableName, action, rows, properties = {}, paramOnly = false) {
         if(paramOnly) {
-            return this._appSheetParam(tableName,action, rows, properties):
+            return this._appSheetParam(tableName,action, rows, properties)
         } else {
             return this._appSheetAPI(tableName, action, rows, properties);
         }

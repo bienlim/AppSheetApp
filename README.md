@@ -22,7 +22,7 @@ This project is already published as an Apps Script library, making it easy to i
 
 1. In the **Libraries** section click on the **Add a library** button (＋)
 2. In the **Script ID** text box, enter
-   `AKfycbzMHTi6x3Kx0zeD_01AIYBYnUAVMRbiWG8RZmgIPsb44ZHxtsWH5jNoSwljEAmx5MAD` and click the **Lookup** button.
+   `1aXPRqSO_ulCdptqlpKm12o81pdOHUlxnr9n6Gw3AIXk0K8Xc_cNCbx4B` and click the **Lookup** button.
 3. Choose a version in the dropdown box (usually best to pick the latest
    version).
 4. Click the **Add** button.
@@ -115,6 +115,7 @@ For more detailed information on the data about the actions, properties, rows an
 | [`Edit(tableName, rows, properties = {})`](#Edit)          | Update records in a table.             |
 | [`Find(tableName, rows, properties = {})`](#Find)          | Read records from a table.             |
 | [`Action(tableName, action, rows, properties = {})`](#Action)      | Invoke an action.                      |
+| [`FetchAll(request[])`](#FetchAll)      | Process requests in parallel.                   |
 
 <a name="connect"></a>
 
@@ -222,6 +223,19 @@ function findRowsInTable(){
 **Returns**: <code>Object</code> - AppSheet Response
 
 <a name="Action"></a>
+
+## <code>Action(tableName, action, rows, properties) ⇒ Object</code>
+Invoke an action
+
+| Param | Type | Description |
+| --- | --- | --- |
+| `tableName` | <code>String</code> | specifies the name of the table |
+| `rows` | <code>Array.&lt;Object&gt;</code> | One or more Rows elements specifying the key field values of the rows to which the action is to be applied. |
+| `action` | <code>String</code> | The action name. |
+| `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
+
+
+<a name="FetchAll"></a>
 
 ## <code>Action(tableName, action, rows, properties) ⇒ Object</code>
 Invoke an action

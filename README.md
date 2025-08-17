@@ -7,10 +7,13 @@ The AppSheetApp service lets you access the AppSheet API using Apps Script. The 
 - Read a table record
 - Update table records
 - Invoke an action you have defined in AppSheet (limited to certain action types)
+- FetchAll methods in parallel
 
 > **Note:** The AppSheet API is supported for Enterprise plans only.
 
 `AppSheetApp` has been created by Martin Hawksey (https://g.dev/mhawksey), Collaboration Engineer at [CTS](https://cts.co/).
+
+`FetchAll` has been added by Bien Lim, AppSheet enthusiast.
 
 ## Enabling the AppSheet API
 
@@ -110,12 +113,12 @@ For more detailed information on the data about the actions, properties, rows an
 | Method                                                     | Description                            |
 | :--------------------------------------------------------- | :------------------------------------- |
 | [`connect(appId, applicationAccessKey)`](#connect)         | Connect to an AppSheet App.            |
-| [`Add(tableName, rows, properties = {})`](#Add)            | Add records to a table.                |
-| [`Delete(tableName, rows, properties = {})`](#Delete)      | Delete records from a table.           |
-| [`Edit(tableName, rows, properties = {})`](#Edit)          | Update records in a table.             |
-| [`Find(tableName, rows, properties = {})`](#Find)          | Read records from a table.             |
-| [`Action(tableName, action, rows, properties = {})`](#Action)      | Invoke an action.                      |
-| [`FetchAll(request[])`](#FetchAll)      | Process requests in parallel.                   |
+| [`Add(tableName, rows, properties = {}, isAsync = false)`](#Add)            | Add records to a table.                |
+| [`Delete(tableName, rows, properties = {}, isAsync = false)`](#Delete)      | Delete records from a table.           |
+| [`Edit(tableName, rows, properties = {}, isAsync = false)`](#Edit)          | Update records in a table.             |
+| [`Find(tableName, rows, properties = {}, isAsync = false)`](#Find)          | Read records from a table.             |
+| [`Action(tableName, action, rows, properties = {}, isAsync = false)`](#Action)      | Invoke an action.                      |
+| [`FetchAll(...request)`](#FetchAll)      | Run multiple method requests in parallel.                   |
 
 <a name="connect"></a>
 
@@ -143,7 +146,7 @@ const AppSheet = AppSheetApp.connect('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
 
 <a name="Add"></a>
 
-## <code>Add(tableName, rows, properties) ⇒ Object</code>
+## <code>Add(tableName, rows, properties, isAsync) ⇒ Object</code>
 Add records to a table
 
 | Param | Type | Description |
@@ -151,11 +154,13 @@ Add records to a table
 | `tableName` | <code>String</code> | specifies the name of the table |
 | `rows` | <code>Array.&lt;Object&gt;</code> | One or more Rows elements. Each individual Row value must normally include the key field values of the record to be added. However, if the key field contains an Initial value, you can omit the key field value. For example, you should omit the key field value when the key field has an Initial value of UNIQUEID() or RANDBETWEEN(). The system will initialize the key field to the Initial value. |
 | `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
+| `isAsync` | <code>Bool</code> | **Optional**. Default values is false. Only set as `TRUE` if called within `FetchAll`.
+
 
 **Returns**: <code>Object</code> - AppSheet Response
 <a name="Delete"></a>
 
-## <code>Delete(tableName, rows, properties) ⇒ Object</code>
+## <code>Delete(tableName, rows, properties, isAsync) ⇒ Object</code>
 Delete records from a table
 
 | Param | Type | Description |
@@ -163,12 +168,14 @@ Delete records from a table
 | `tableName` | <code>String</code> | specifies the name of the table |
 | `rows` | <code>Array.&lt;Object&gt;</code> | One or more Rows elements to be deleted. Each Row value may contain field values of the key field values of the record to be deleted. |
 | `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
+| `isAsync` | <code>Bool</code> | **Optional**. Default values is false. Only set as `TRUE` if called within `FetchAll`.  
+
 
 **Returns**: <code>Object</code> - AppSheet Response
 
 <a name="Edit"></a>
 
-## <code>Edit(tableName, rows, properties) ⇒ Object</code>
+## <code>Edit(tableName, rows, properties, isAsync) ⇒ Object</code>
 
 Update records in a table
 
@@ -176,7 +183,9 @@ Update records in a table
 | --- | --- | --- |
 | `tableName` | <code>String</code> | specifies the name of the table |
 | `rows` | <code>Array.&lt;Object&gt;</code> | One or more Row values to be updated. Each individual Row value must include the key field values of the record to be updated. |
-| `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
+| `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?
+| `isAsync` | <code>Bool</code> | **Optional**. Default values is false. Only set as `TRUE` if called within `FetchAll`.  
+hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
 
 **Returns**: <code>Object</code> - AppSheet Response
 
@@ -219,6 +228,7 @@ function findRowsInTable(){
 | `tableName` | <code>String</code> | specifies the name of the table |
 | `rows` | <code>Array.&lt;Object&gt;</code> | **Optional**. You can omit the Selector property and specify input Rows containing the key values of the records to be read. |
 | `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]. Additionally the optional `Selector` property can used to specify an expression to select and format the rows returned [[Ref](https://support.google.com/appsheet/answer/10105770#:~:text=Read-,selected%20rows,-In%20the%20Selector)]. |
+| `isAsync` | <code>Bool</code> | **Optional**. Default values is false. Only set as `TRUE` if called within `FetchAll`.
 
 **Returns**: <code>Object</code> - AppSheet Response
 
@@ -234,17 +244,39 @@ Invoke an action
 | `action` | <code>String</code> | The action name. |
 | `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
 
+**Returns**: <code>Object</code> - AppSheet Response
 
 <a name="FetchAll"></a>
 
-## <code>Action(tableName, action, rows, properties) ⇒ Object</code>
-Invoke an action
+## <code>FetchAll(...request)</code>
+Run multiple method request in parallel. 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| `tableName` | <code>String</code> | specifies the name of the table |
-| `rows` | <code>Array.&lt;Object&gt;</code> | One or more Rows elements specifying the key field values of the rows to which the action is to be applied. |
-| `action` | <code>String</code> | The action name. |
-| `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
+| `...request` | <code>...&lt;Objects&gt;</code> | One or more Appsheet Methods with isAsync is true |
 
-**Returns**: <code>Object</code> - AppSheet Response
+```
+/**
+ * Return rows from a People table where age is greater or equal to 21
+ * Run as user with the email an.example@email.com
+ */
+function parallelRequest(){
+   const AppSheet = AppSheetApp.connect('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
+
+   const responses = AppSheet.FetchAll(
+      
+      AppSheet.Add('People', sampleData1[] , properties, true),
+      AppSheet.Delete('People', sampleData2[] , properties, true),
+      AppSheet.Edit('People', sampleData3[] , properties, true),
+      AppSheet.Find('People', [], properties, true),
+   }
+
+   const [ respFromAdd, respFromDelete, respFromEdit, respFromFind ] = responses
+}
+```
+
+
+
+
+
+

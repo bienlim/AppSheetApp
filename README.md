@@ -45,7 +45,7 @@ Before you can start making calls to your AppSheet app you need to use the `conn
 
 Once you have connected to your app, you can use methods to add, delete, read, and update table records. The example below shows how to connect to your app and add two rows to a 'People' table:
 
-```
+```javascript
 /**
  * Example function for connecting your AppSheet app
  */
@@ -79,7 +79,7 @@ function addRowsToTable() {
 
 The returned records include all field values. This includes virtual fields and field values computed by worksheet formulas. The following is an example of a response body that might be returned from an `Add` operation (when new records are created) or a `Find` operation (when records are retrieved).
 
-```
+```javascript
 {
   "Rows": [
     {
@@ -135,7 +135,7 @@ To enable the AppSheet API in your app:
 1. Use your app ID and Access Key to connect Apps Script to your app
 
 
-```
+```javascript
 const AppSheet = AppSheetApp.connect('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
 ```
 
@@ -205,7 +205,7 @@ In the `Selector` property, you can specify an expression to select and format t
 
 The `Find` is performed under the identity of the application owner by default. Your can override this by specifying the `RunAsUserEmail` property in the request properties.
 
-```
+```javascript
 /**
  * Return rows from a People table where age is greater or equal to 21
  * Run as user with the email an.example@email.com
@@ -255,24 +255,47 @@ Run multiple method request in parallel.
 | --- | --- | --- |
 | `...request` | <code>...&lt;Objects&gt;</code> | One or more Appsheet Methods with isAsync is true |
 
-```
+```javascript
 /**
- * Return rows from a People table where age is greater or equal to 21
- * Run as user with the email an.example@email.com
+ * Executes multiple AppSheet API requests in parallel.
+ * This example shows how to perform Add, Delete, Edit, and Find operations simultaneously.
  */
 function parallelRequest(){
-   const AppSheet = AppSheetApp.connect('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
+  // Replace with your actual App ID and Access Key
+  const AppSheet = new AppSheetApp('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
 
-   const responses = AppSheet.FetchAll(
-      
-      AppSheet.Add('People', sampleData1[] , properties, true),
-      AppSheet.Delete('People', sampleData2[] , properties, true),
-      AppSheet.Edit('People', sampleData3[] , properties, true),
-      AppSheet.Find('People', [], properties, true),
-   }
+  // Placeholder data for demonstration
+  const properties = { "Locale": "en-US" };
 
-   const [ respFromAdd, respFromDelete, respFromEdit, respFromFind ] = responses
+  // Sample data for adding a new record. The key field is usually omitted if it's auto-generated.
+  const dataToAdd = [{"Name": "John Doe", "Age": 30}];
+
+  // Sample data for editing an existing record. The key field is required to identify the row.
+  const dataToEdit = [{"ID": "unique-id-123", "Age": 31}];
+
+  // Sample data for deleting an existing record. The key field is required.
+  const dataToDelete = [{"ID": "unique-id-456"}];
+
+  // The FetchAll method takes multiple API calls as arguments.
+  // The 'true' argument tells each method to return a parameter object instead of
+  // making an immediate API call. These parameter objects are then passed to fetchAll().
+  const responses = AppSheet.fetchAll(
+    AppSheet.Add('People', dataToAdd, properties, true),
+    AppSheet.Delete('People', dataToDelete, properties, true),
+    AppSheet.Edit('People', dataToEdit, properties, true),
+    AppSheet.Find('People', [], properties, true)
+  );
+
+  // The responses are returned in an array, in the same order as the requests.
+  const [ respFromAdd, respFromDelete, respFromEdit, respFromFind ] = responses;
+
+  // You can now handle each response individually
+  console.log('Add Response:', respFromAdd);
+  console.log('Delete Response:', respFromDelete);
+  console.log('Edit Response:', respFromEdit);
+  console.log('Find Response:', respFromFind);
 }
+
 ```
 
 

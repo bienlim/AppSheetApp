@@ -42,10 +42,13 @@ function  connect(appId, applicationAccessKey) {
  * @param {String} tableName - specifies the name of the table
  * @param {Object[]} rows - One or more Rows elements. Each individual Row value must normally include the key field values of the record to be added. However, if the key field contains an Initial value, you can omit the key field value. For example, you should omit the key field value when the key field has an Initial value of UNIQUEID() or RANDBETWEEN(). The system will initialize the key field to the Initial value.
  * @param {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]    
- * @returns {Object} AppSheet Response
+ * @param {Boolean} isAsync - **Optional** return a AppSheet API request object instead of making an immediate API call
+ *  @returns {Object} AppSheet Response
  */
-function Add(tableName, rows, properties = {}) {
-    return AppSheetApp._appSheetAPI(tableName, 'Add', rows, properties);
+function Add(tableName, rows, properties = {}, isAsync = false) {
+    return isAsync
+      ? AppSheetApp._appSheetParam(tableName, "Add", rows, properties)
+      : AppSheetApp._appSheetAPI(tableName, "Add", rows, properties);
 }
 
 /**
@@ -54,10 +57,13 @@ function Add(tableName, rows, properties = {}) {
  * @param {String} tableName - specifies the name of the table
  * @param {Object[]} rows - One or more Rows elements to be deleted. Each Row value may contain field values of the key field values of the record to be deleted.
  * @param {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]  
+ * @param {Boolean} isAsync - **Optional** return a AppSheet API request object instead of making an immediate API call
  * @returns {Object} AppSheet Response
  */
-function Delete(tableName, rows, properties = {}) {
-    return AppSheetApp._appSheetAPI(tableName, 'Delete', rows, properties);
+function Delete(tableName, rows, properties = {}, isAsync = false) {
+    return isAsync
+      ? AppSheetApp._appSheetParam(tableName, "Delete", rows, properties)
+      : AppSheetApp._appSheetAPI(tableName, "Delete", rows, properties);
 }
 
 /**
@@ -66,10 +72,13 @@ function Delete(tableName, rows, properties = {}) {
  * @param {String} tableName - specifies the name of the table
  * @param {Object[]} rows - One or more Row values to be updated. Each individual Row value must include the key field values of the record to be updated.
  * @param {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]   
+ * @param {Boolean} isAsync - **Optional** if true, return a AppSheet API request object instead of making an immediate API call
  * @returns {Object} AppSheet Response
  */
-function Edit(tableName, rows, properties = {}) {
-    return AppSheetApp._appSheetAPI(tableName, 'Edit', rows, properties);
+function Edit(tableName, rows, properties = {}, isAsync = false) {
+    return isAsync
+      ? AppSheetApp._appSheetParam(tableName, "Edit", rows, properties)
+      : AppSheetApp._appSheetAPI(tableName, "Edit", rows, properties);
 }
 
 /**
@@ -77,11 +86,14 @@ function Edit(tableName, rows, properties = {}) {
  * 
  * @param {String} tableName - specifies the name of the table
  * @param {Object[]} rows - **Optional**. You can omit the Selector property and specify input Rows containing the key values of the records to be read.
- * @param {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]. Additionally the optional `Selector` property can used to specify an expression to select and format the rows returned [[Ref](https://support.google.com/appsheet/answer/10105770#:~:text=Read-,selected%20rows,-In%20the%20Selector)].    
+ * @param {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]. Additionally the optional `Selector` property can used to specify an expression to select and format the rows returned [[Ref](https://support.google.com/appsheet/answer/10105770#:~:text=Read-,selected%20rows,-In%20the%20Selector)].   
+ * @param {Boolean} isAsync - **Optional** if true, return a AppSheet API request object instead of making an immediate API call
  * @returns {Object} AppSheet Response
  */
-function Find(tableName, rows, properties = {}) {
-    return AppSheetApp._appSheetAPI(tableName, 'Find', rows, properties);
+function Find(tableName, rows, properties = {}, isAsync = false) {
+    return isAsync
+      ? AppSheetApp._appSheetParam(tableName, "Find", rows, properties)
+      : AppSheetApp._appSheetAPI(tableName, "Find", rows, properties);
 }
 
 /**
@@ -91,10 +103,35 @@ function Find(tableName, rows, properties = {}) {
  * @param {String} action - The action name.
  * @param {Object[]} rows - One or more Rows elements specifying the key field values of the rows to which the action is to be applied.
  * @param {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]   
+ * @param {Boolean} isAsync - **Optional** if true, return a AppSheet API request object instead of making an immediate API call
  * @returns {Object} AppSheet Response
  */
-function Action(tableName, action, rows, properties = {}) {
-    return AppSheetApp._appSheetAPI(tableName, action, rows, properties);
+function Action(tableName, action, rows, properties = {}, isAsync = false) {
+    return isAsync
+      ? AppSheetApp._appSheetParam(tableName, action , rows, properties)
+      : AppSheetApp._appSheetAPI(tableName, action , rows, properties);
+}
+
+/**
+ * @typedef {object} requestObject
+ * @property {String} action - The action name.
+ * @property {Object[]} rows - One or more Rows elements specifying the key field values of the rows to which the action is to be applied.
+ * @property {Object} properties - **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]   
+ * @property {Boolean} isAsync - **Optional** if true, return a AppSheet API request object instead of making an immediate API call
+ */
+/**
+ * Makes multiple requests to the AppSheet API.
+ *
+ * @param {...requestObject} params - A variable number of objects, where each object represents a single AppSheet API request.
+ * @returns {Object[]} An array of AppSheet API responses, with each response corresponding to a request in the order they were provided.
+ */
+function fetchAll(...params){
+  try {
+    const responses = UrlFetchApp.fetchAll(params);
+    return responses.map(response => JSON.parse(response.getContentText()));
+  } catch (e) {
+  return e;
+  }
 }
 
 /**
@@ -112,79 +149,62 @@ class _AppSheet {
         this.applicationAccessKey = applicationAccessKey;
     }
 
-    Add(tableName, rows, properties = {}, paramOnly = false ) {
-       if(paramOnly) {
-            return this._appSheetParam(tableName, 'Add', rows, properties)
-        } else {
-            return this._appSheetAPI(tableName, 'Add', rows, properties);
-        }
+    Add(tableName, rows, properties = {}, isAsync = false ) {
+      return isAsync
+        ? this._appSheetParam(tableName, 'Add', rows, properties)
+        : this._appSheetAPI(tableName, 'Add', rows, properties)
     }
 
-    Delete(tableName, rows, properties = {},  paramOnly = false ) {
-        if(paramOnly) {
-            return this._appSheetParam(tableName, 'Delete', rows, properties)
-        } else {
-            return this._appSheetAPI(tableName, 'Delete', rows, properties);
-        }
+    Delete(tableName, rows, properties = {},  isAsync = false ) {
+      return isAsync
+        ? this._appSheetParam(tableName, 'Delete', rows, properties)
+        : this._appSheetAPI(tableName, 'Delete', rows, properties);
     }
 
-    Edit(tableName, rows, properties = {}, paramOnly = false) {
-       if(paramOnly) {
-            return this._appSheetParam(tableName, 'Edit', rows, properties)
-        } else {
-            return this._appSheetAPI(tableName, 'Edit', rows, properties);
-        }
+    Edit(tableName, rows, properties = {}, isAsync = false) {
+      return isAsync
+        ? this._appSheetParam(tableName, 'Edit', rows, properties)
+        : this._appSheetAPI(tableName, 'Edit', rows, properties);
     }
 
-    Find(tableName, rows, properties = {}, paramOnly = false) {
-        if(paramOnly) {
-            return this._appSheetParam(tableName, 'Find', rows, properties)
-        } else {
-            return this._appSheetAPI(tableName, 'Find', rows, properties);
-        }
+    Find(tableName, rows, properties = {}, isAsync = false) {
+      return isAsync
+        ? this._appSheetParam(tableName, 'Find', rows, properties)
+        : this._appSheetAPI(tableName, 'Find', rows, properties);
     }
 
-    Action(tableName, action, rows, properties = {}, paramOnly = false) {
-        if(paramOnly) {
-            return this._appSheetParam(tableName,action, rows, properties)
-        } else {
-            return this._appSheetAPI(tableName, action, rows, properties);
-        }
+    Action(tableName, action, rows, properties = {}, isAsync = false) {
+      return isAsync 
+        ? this._appSheetParam(tableName,action, rows, properties)
+        : this._appSheetAPI(tableName, action, rows, properties);
     }
 
-    /**
-     * Make a request to the AppSheet API.
-     * @param {String} tableName - The name of the table.
-     * @param {String} action - The action to perform.
-     * @param {Object[]} rows - The rows to operate on.
-     * @param {Object} properties - Additional properties for the request.
-     */
+    fetchAll(...params){
+      try {
+          const responses = UrlFetchApp.fetchAll(params);
+          return responses.map(response => JSON.parse(response.getContentText()));
+      } catch (e) {
+          return e;
+      }
+    }
+
     _appSheetAPI(tableName, action, rows, properties) {
         const params = this._appSheetParam(tableName, action, rows, properties);
         const url = params.url;
-        delete params.url; // url should not be a part of params
-
+        
+        // Remove the url from params to avoid sending it in the request
+        // This is necessary because UrlFetchApp does not support sending the url in the params object
+        // and it expects the url to be a separate parameter.
+        delete params.url; 
 
         try {
             const response = UrlFetchApp.fetch(url, params);
             return JSON.parse(response.getContentText());
         } catch (e) {
             return e;
-        }
+      }
     }
 
-    /**
-     * Make multiple requests to the AppSheet API.
-     * @param {Array<{tableName: string, action: string, rows: Object[], properties: Object}>} params - An array of request parameters.
-     */
-    fetchAll(...params){
-        try {
-            const responses = UrlFetchApp.fetchAll(params);
-            return responses.map(response => JSON.parse(response.getContentText()));
-        } catch (e) {
-            return e;
-        }
-    }
     _appSheetParam(tableName, action, rows = [], properties = {}) {        
         return {
             url: `https://api.appsheet.com/api/v2/apps/${this.appId}/tables/${tableName}/Action`,

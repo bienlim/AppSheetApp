@@ -154,7 +154,7 @@ Add records to a table
 | `tableName` | <code>String</code> | specifies the name of the table |
 | `rows` | <code>Array.&lt;Object&gt;</code> | One or more Rows elements. Each individual Row value must normally include the key field values of the record to be added. However, if the key field contains an Initial value, you can omit the key field value. For example, you should omit the key field value when the key field has an Initial value of UNIQUEID() or RANDBETWEEN(). The system will initialize the key field to the Initial value. |
 | `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
-| `isAsync` | <code>Bool</code> | **Optional**. Default values is false. Only set as `TRUE` if called within `FetchAll`.
+| `isAsync` | <code>Bool</code> | **Optional** if true, return a AppSheet API request object instead of making an immediate API call |
 
 
 **Returns**: <code>Object</code> - AppSheet Response
@@ -168,7 +168,7 @@ Delete records from a table
 | `tableName` | <code>String</code> | specifies the name of the table |
 | `rows` | <code>Array.&lt;Object&gt;</code> | One or more Rows elements to be deleted. Each Row value may contain field values of the key field values of the record to be deleted. |
 | `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
-| `isAsync` | <code>Bool</code> | **Optional**. Default values is false. Only set as `TRUE` if called within `FetchAll`.  
+| `isAsync` | <code>Bool</code> | **Optional** if true, return a AppSheet API request object instead of making an immediate API call |
 
 
 **Returns**: <code>Object</code> - AppSheet Response
@@ -183,9 +183,9 @@ Update records in a table
 | --- | --- | --- |
 | `tableName` | <code>String</code> | specifies the name of the table |
 | `rows` | <code>Array.&lt;Object&gt;</code> | One or more Row values to be updated. Each individual Row value must include the key field values of the record to be updated. |
-| `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?
-| `isAsync` | <code>Bool</code> | **Optional**. Default values is false. Only set as `TRUE` if called within `FetchAll`.  
-hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
+| `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
+| `isAsync` | <code>Bool</code> | **Optional** if true, return a AppSheet API request object instead of making an immediate API call |
+
 
 **Returns**: <code>Object</code> - AppSheet Response
 
@@ -228,7 +228,7 @@ function findRowsInTable(){
 | `tableName` | <code>String</code> | specifies the name of the table |
 | `rows` | <code>Array.&lt;Object&gt;</code> | **Optional**. You can omit the Selector property and specify input Rows containing the key values of the records to be read. |
 | `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)]. Additionally the optional `Selector` property can used to specify an expression to select and format the rows returned [[Ref](https://support.google.com/appsheet/answer/10105770#:~:text=Read-,selected%20rows,-In%20the%20Selector)]. |
-| `isAsync` | <code>Bool</code> | **Optional**. Default values is false. Only set as `TRUE` if called within `FetchAll`.
+| `isAsync` | <code>Bool</code> | **Optional** if true, return a AppSheet API request object instead of making an immediate API call |
 
 **Returns**: <code>Object</code> - AppSheet Response
 
@@ -243,6 +243,7 @@ Invoke an action
 | `rows` | <code>Array.&lt;Object&gt;</code> | One or more Rows elements specifying the key field values of the rows to which the action is to be applied. |
 | `action` | <code>String</code> | The action name. |
 | `properties` | <code>Object</code> | **Optional**. Optional properties such as Locale, Location, Timezone, and UserId. [[Ref](https://support.google.com/appsheet/answer/10105398?hl=en#:~:text=for%20the%20table.-,Properties,-The%20properties%20of)] |
+| `isAsync` | <code>Bool</code> | **Optional** if true, return a AppSheet API request object instead of making an immediate API call |
 
 **Returns**: <code>Object</code> - AppSheet Response
 
@@ -253,7 +254,7 @@ Run multiple method request in parallel.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| `...request` | <code>...&lt;Objects&gt;</code> | One or more Appsheet Methods with isAsync is true |
+| `...request` | <code>...&lt;Objects&gt;</code> | One or more AppSheet API request object |
 
 ```javascript
 /**
@@ -276,7 +277,7 @@ function parallelRequest(){
   // Sample data for deleting an existing record. The key field is required.
   const dataToDelete = [{"ID": "unique-id-456"}];
 
-  // The FetchAll method takes multiple API calls as arguments.
+  // The fetchAll method takes multiple API calls as arguments.
   // The 'true' argument tells each method to return a parameter object instead of
   // making an immediate API call. These parameter objects are then passed to fetchAll().
   const responses = AppSheet.fetchAll(

@@ -7,13 +7,13 @@ The AppSheetApp service lets you access the AppSheet API using Apps Script. The 
 - Read a table record
 - Update table records
 - Invoke an action you have defined in AppSheet (limited to certain action types)
-- FetchAll methods in parallel
+- fetchAll methods in parallel
 
 > **Note:** The AppSheet API is supported for Enterprise plans only.
 
 `AppSheetApp` has been created by Martin Hawksey (https://g.dev/mhawksey), Collaboration Engineer at [CTS](https://cts.co/).
 
-`FetchAll` has been added by Bien Lim, AppSheet enthusiast.
+`fetchAll` has been added by Bien Lim, AppSheet enthusiast.
 
 ## Enabling the AppSheet API
 
@@ -118,7 +118,7 @@ For more detailed information on the data about the actions, properties, rows an
 | [`Edit(tableName, rows, properties = {}, isAsync = false)`](#Edit)          | Update records in a table.             |
 | [`Find(tableName, rows, properties = {}, isAsync = false)`](#Find)          | Read records from a table.             |
 | [`Action(tableName, action, rows, properties = {}, isAsync = false)`](#Action)      | Invoke an action.                      |
-| [`FetchAll(...request)`](#FetchAll)      | Run multiple method requests in parallel.                   |
+| [`fetchAll(...request)`](#fetchAll)      | Run multiple method requests in parallel.                   |
 
 <a name="connect"></a>
 
@@ -246,9 +246,9 @@ Invoke an action
 
 **Returns**: <code>Object</code> - AppSheet Response
 
-<a name="FetchAll"></a>
+<a name="fetchAll"></a>
 
-## <code>FetchAll(...request)</code>
+## <code>fetchAll(...request)</code>
 Run multiple method request in parallel. 
 
 | Param | Type | Description |
@@ -263,7 +263,7 @@ Run multiple method request in parallel.
 function parallelRequest(){
    const AppSheet = AppSheetApp.connect('YOUR_APP_ID', 'YOUR_ACCESS_KEY');
 
-   const responses = AppSheet.FetchAll(
+   const responses = AppSheet.fetchAll(
       
       AppSheet.Add('People', sampleData1[] , properties, true),
       AppSheet.Delete('People', sampleData2[] , properties, true),
